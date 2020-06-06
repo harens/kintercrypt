@@ -1,4 +1,5 @@
 from tkinter.filedialog import askopenfilename
+import tkinter.ttk as ttk
 import tkinter as tk
 
 
@@ -16,11 +17,20 @@ class App(tk.Frame):
 
         # Minimum Dimensions are in pixels
         self.width = 400
-        self.height = 100
+        self.height = 110
 
-        # Used to set the background colour of the main window and widgets
-        # Currently a dark grey
-        self.backgroundColour = "#3E4149"
+        # Create the tabs
+        self.note = ttk.Notebook(self.parent)
+        self.tab1 = ttk.Frame(self.note)
+        self.tab2 = ttk.Frame(self.note)
+        self.tab3 = ttk.Frame(self.note)
+
+        # Assign tab titles
+        self.note.add(self.tab1, text="General")
+        self.note.add(self.tab2, text="Settings")
+        self.note.add(self.tab3, text="About")
+
+        self.note.pack(fill=tk.BOTH, expand=True)
 
         # Methods to arrange the app
         self.configure_app()
@@ -30,17 +40,13 @@ class App(tk.Frame):
         # Sets up properties of the main window
         self.parent.title("kintercrypt")
         self.parent.geometry(f"{self.width}x{self.height}")
-        self.parent.configure(bg=self.backgroundColour)
         self.parent.minsize(self.width, self.height)
 
         # Allows the window to be resizable
         # The range denotes the number of columns and rows
         for axis in range(4):
-            self.parent.rowconfigure(axis, weight=1)
-            self.parent.columnconfigure(axis, weight=1)
-
-        # Acts as a border before the edge of the window
-        self.parent.grid_columnconfigure(4, minsize=10)
+            self.tab1.rowconfigure(axis, weight=1)
+            self.tab1.columnconfigure(axis, weight=1)
 
     def add_widgets(self) -> None:
         # Adds widgets so that the match the background colour
@@ -51,38 +57,33 @@ class App(tk.Frame):
         # This works since the first paramater represents the parent window
 
         # Password Label
-        tk.Label(
-            self.parent,
+        ttk.Label(
+            self.tab1,
             text="Password:",
-            background=self.backgroundColour,
-            foreground="white",
         ).grid(row=1,column=0, sticky='WE')
 
         # Password Input
-        tk.Entry(self.parent, show="*").grid(row=1, column=1, columnspan=3, sticky='WE')
+        ttk.Entry(self.tab1, show="*").grid(row=1, column=1, columnspan=3, sticky='WE')
 
         # Choose between encrypt and decrypt
         # Based off http://effbot.org/tkinterbook/optionmenu.htm
-        initial_value = tk.StringVar(self.parent)
+        initial_value = tk.StringVar(self.tab1)
         initial_value.set("Encrypt")
 
-        option_menu = tk.OptionMenu(self.parent, initial_value, "Encrypt", "Decrypt")
+        option_menu = ttk.OptionMenu(self.tab1, initial_value, "Encrypt", "Decrypt")
         option_menu.grid(row=2, column=1, sticky="WE")  # Seperate grid so that the widget isn't assigned as None
-        option_menu.config(bg=self.backgroundColour)
 
         # File input button
         # TODO: Create a subclass of tk.button to simplify process
-        tk.Button(
-            self.parent,
+        ttk.Button(
+            self.tab1,
             text="Upload file",
-            highlightbackground=self.backgroundColour,
             command=self.choose_file,
         ).grid(row=2, column=2, sticky="WE")
 
-        tk.Button(
-            self.parent,
+        ttk.Button(
+            self.tab1,
             text="Start",
-            highlightbackground=self.backgroundColour,
         ).grid(row=2, column=3, sticky="WE")
 
     def choose_file(self) -> None:
