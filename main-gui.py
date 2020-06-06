@@ -17,6 +17,10 @@ class App(tk.Frame):
         # Configure additional properties
         self.parent = parent
 
+        # Dimensions are in pixels
+        self.width = 700
+        self.height = 400
+
         # Used to set the background colour of the main window and widgets
         # Currently a dark grey
         self.backgroundColour = "#3E4149"
@@ -28,7 +32,8 @@ class App(tk.Frame):
     def configure_app(self) -> None:
         # Sets up properties of the main window
         self.parent.title("")  # No window title
-        self.parent.geometry("400x500")
+        self.parent.geometry(f"{self.width}x{self.height}")
+        self.parent.resizable(0, 0)  # Not resizable
         self.parent.configure(bg=self.backgroundColour)
 
     def add_widgets(self) -> None:
@@ -45,15 +50,44 @@ class App(tk.Frame):
             text="kintercrypt",
             background=self.backgroundColour,
             foreground="white",
-        ).pack()
+        ).grid(row=0)
+
+        # Password Label
+        tk.Label(
+            self.parent,
+            text="Password",
+            background=self.backgroundColour,
+            foreground="white",
+        ).grid(row=1,column=0)
+
+        # Password Input
+        tk.Entry(self.parent, show="*").grid(row=1, column=1)
+
+        # Choose between encrypt and decrypt
+        # Based off http://effbot.org/tkinterbook/optionmenu.htm
+        initial_value = tk.StringVar(self.parent)
+        initial_value.set("Encrypt")
+
+        option_menu = tk.OptionMenu(self.parent, initial_value, "Encrypt", "Decrypt")
+        option_menu.grid(row=2, column=0)  # Seperate grid so that the widget isn't assigned as None
+        option_menu.config(bg=self.backgroundColour)
 
         # File input button
+        # TODO: Create a subclass of tk.button to simplify process
         tk.Button(
             self.parent,
             text="Upload file",
             highlightbackground=self.backgroundColour,
             command=self.choose_file,
-        ).pack()
+        ).grid(row=2, column=1)
+
+        # TODO: Start button
+        tk.Button(
+            self.parent,
+            text="Start",
+            highlightbackground=self.backgroundColour,
+        ).grid(row=2, column=2)
+
 
     def choose_file(self) -> None:
         # Creates a file dialog object
