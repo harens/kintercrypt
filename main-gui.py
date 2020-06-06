@@ -1,4 +1,5 @@
 from tkinter.filedialog import askopenfilename
+from tkinter import scrolledtext
 import tkinter.ttk as ttk
 import tkinter as tk
 
@@ -17,7 +18,7 @@ class App(tk.Frame):
 
         # Minimum Dimensions are in pixels
         self.width = 400
-        self.height = 110
+        self.height = 200
 
         # Create the tabs
         self.note = ttk.Notebook(self.parent)
@@ -39,7 +40,7 @@ class App(tk.Frame):
     def configure_app(self) -> None:
         # Sets up properties of the main window
         self.parent.title("kintercrypt")
-        self.parent.geometry(f"{self.width}x{self.height}")
+        self.parent.geometry(f"{self.width + 100}x{self.height + 100}")  # 100x100 bigger than minimum size
         self.parent.minsize(self.width, self.height)
 
         # Allows the window to be resizable
@@ -47,6 +48,9 @@ class App(tk.Frame):
         for axis in range(4):
             self.tab1.rowconfigure(axis, weight=1)
             self.tab1.columnconfigure(axis, weight=1)
+
+        self.tab1.grid_columnconfigure(0, minsize=110)  # Prevents buttons from being squashed
+        self.tab1.grid_rowconfigure(0, minsize=40)  # Prevents password area from being squashed
 
     def add_widgets(self) -> None:
         # Adds widgets so that the match the background colour
@@ -60,31 +64,40 @@ class App(tk.Frame):
         ttk.Label(
             self.tab1,
             text="Password:",
-        ).grid(row=1,column=0, sticky='WE')
+        ).grid(row=0, column=0)
 
         # Password Input
-        ttk.Entry(self.tab1, show="*").grid(row=1, column=1, columnspan=3, sticky='WE')
+        ttk.Entry(self.tab1, show="*").grid(row=0, column=1, columnspan=3, sticky='WE')
+
+        # Allows the buttons to be in the same grid cell
+        button_area = ttk.Frame(self.tab1)
+        button_area.grid(row=1, column=0)
 
         # Choose between encrypt and decrypt
         # Based off http://effbot.org/tkinterbook/optionmenu.htm
         initial_value = tk.StringVar(self.tab1)
         initial_value.set("Encrypt")
 
-        option_menu = ttk.OptionMenu(self.tab1, initial_value, "Encrypt", "Decrypt")
-        option_menu.grid(row=2, column=1, sticky="WE")  # Seperate grid so that the widget isn't assigned as None
+        option_menu = ttk.OptionMenu(button_area, initial_value, "Encrypt", "Decrypt")
+        option_menu.grid(row=0, column=0)  # Seperate grid so that the widget isn't assigned as None
 
-        # File input button
         # TODO: Create a subclass of tk.button to simplify process
         ttk.Button(
-            self.tab1,
+            button_area,
             text="Upload file",
             command=self.choose_file,
-        ).grid(row=2, column=2, sticky="WE")
+        ).grid(row=1, column=0, sticky="WE", pady=10)  # Padding for the middle button spaces all buttons
 
         ttk.Button(
-            self.tab1,
+            button_area,
             text="Start",
-        ).grid(row=2, column=3, sticky="WE")
+        ).grid(row=2, column=0, sticky="WE")
+
+        output_area = scrolledtext.ScrolledText(self.tab1,
+                                                wrap=tk.WORD,
+                                                state='disabled')  # Prevents user from typing in it
+
+        output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
 
     def choose_file(self) -> None:
         # Creates a file dialog object
