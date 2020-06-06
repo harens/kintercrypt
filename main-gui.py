@@ -1,4 +1,3 @@
-from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 import tkinter as tk
 
@@ -6,8 +5,6 @@ import tkinter as tk
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
 # This configures the main window
 class App(tk.Frame):
-    parent: Tk
-    backgroundColour: str
 
     def __init__(self, parent: tk.Tk, **kw: object) -> None:
         # Suggested in the Frame docs
@@ -17,9 +14,9 @@ class App(tk.Frame):
         # Configure additional properties
         self.parent = parent
 
-        # Dimensions are in pixels
-        self.width = 350
-        self.height = 300
+        # Minimum Dimensions are in pixels
+        self.width = 400
+        self.height = 100
 
         # Used to set the background colour of the main window and widgets
         # Currently a dark grey
@@ -31,10 +28,19 @@ class App(tk.Frame):
 
     def configure_app(self) -> None:
         # Sets up properties of the main window
-        self.parent.title("")  # No window title
+        self.parent.title("kintercrypt")
         self.parent.geometry(f"{self.width}x{self.height}")
-        self.parent.resizable(0, 0)  # Not resizable
         self.parent.configure(bg=self.backgroundColour)
+        self.parent.minsize(self.width, self.height)
+
+        # Allows the window to be resizable
+        # The range denotes the number of columns and rows
+        for axis in range(4):
+            self.parent.rowconfigure(axis, weight=1)
+            self.parent.columnconfigure(axis, weight=1)
+
+        # Acts as a border before the edge of the window
+        self.parent.grid_columnconfigure(4, minsize=10)
 
     def add_widgets(self) -> None:
         # Adds widgets so that the match the background colour
@@ -44,21 +50,13 @@ class App(tk.Frame):
         # https://dev.to/abdurrahmaanj/building-an-oop-calculator-and-what-it-means-to-write-a-widget-library-4560z
         # This works since the first paramater represents the parent window
 
-        # Main title
-        tk.Label(
-            self.parent,
-            text="kintercrypt",
-            background=self.backgroundColour,
-            foreground="white",
-        ).grid(row=0, sticky='NW')
-
         # Password Label
         tk.Label(
             self.parent,
             text="Password:",
             background=self.backgroundColour,
             foreground="white",
-        ).grid(row=1,column=0, sticky='W')
+        ).grid(row=1,column=0, sticky='WE')
 
         # Password Input
         tk.Entry(self.parent, show="*").grid(row=1, column=1, columnspan=3, sticky='WE')
@@ -69,7 +67,7 @@ class App(tk.Frame):
         initial_value.set("Encrypt")
 
         option_menu = tk.OptionMenu(self.parent, initial_value, "Encrypt", "Decrypt")
-        option_menu.grid(row=2, column=1)  # Seperate grid so that the widget isn't assigned as None
+        option_menu.grid(row=2, column=1, sticky="WE")  # Seperate grid so that the widget isn't assigned as None
         option_menu.config(bg=self.backgroundColour)
 
         # File input button
@@ -79,21 +77,20 @@ class App(tk.Frame):
             text="Upload file",
             highlightbackground=self.backgroundColour,
             command=self.choose_file,
-        ).grid(row=2, column=2)
+        ).grid(row=2, column=2, sticky="WE")
 
         tk.Button(
             self.parent,
             text="Start",
             highlightbackground=self.backgroundColour,
-        ).grid(row=2, column=3)
-
+        ).grid(row=2, column=3, sticky="WE")
 
     def choose_file(self) -> None:
         # Creates a file dialog object
         file: str = askopenfilename()
 
 
-def main():
+def main() -> None:
     # Creates the main window
     window = App(tk.Tk())
 
