@@ -18,8 +18,8 @@ class App(tk.Frame):
         self.parent = parent
 
         # Dimensions are in pixels
-        self.width = 700
-        self.height = 400
+        self.width = 350
+        self.height = 300
 
         # Used to set the background colour of the main window and widgets
         # Currently a dark grey
@@ -50,18 +50,18 @@ class App(tk.Frame):
             text="kintercrypt",
             background=self.backgroundColour,
             foreground="white",
-        ).grid(row=0)
+        ).grid(row=0, sticky='NW')
 
         # Password Label
         tk.Label(
             self.parent,
-            text="Password",
+            text="Password:",
             background=self.backgroundColour,
             foreground="white",
-        ).grid(row=1,column=0)
+        ).grid(row=1,column=0, sticky='W')
 
         # Password Input
-        tk.Entry(self.parent, show="*").grid(row=1, column=1)
+        tk.Entry(self.parent, show="*").grid(row=1, column=1, columnspan=3, sticky='WE')
 
         # Choose between encrypt and decrypt
         # Based off http://effbot.org/tkinterbook/optionmenu.htm
@@ -69,7 +69,7 @@ class App(tk.Frame):
         initial_value.set("Encrypt")
 
         option_menu = tk.OptionMenu(self.parent, initial_value, "Encrypt", "Decrypt")
-        option_menu.grid(row=2, column=0)  # Seperate grid so that the widget isn't assigned as None
+        option_menu.grid(row=2, column=1)  # Seperate grid so that the widget isn't assigned as None
         option_menu.config(bg=self.backgroundColour)
 
         # File input button
@@ -79,14 +79,13 @@ class App(tk.Frame):
             text="Upload file",
             highlightbackground=self.backgroundColour,
             command=self.choose_file,
-        ).grid(row=2, column=1)
+        ).grid(row=2, column=2)
 
-        # TODO: Start button
         tk.Button(
             self.parent,
             text="Start",
             highlightbackground=self.backgroundColour,
-        ).grid(row=2, column=2)
+        ).grid(row=2, column=3)
 
 
     def choose_file(self) -> None:
