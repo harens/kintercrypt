@@ -21,6 +21,9 @@ class App(tk.Frame):
         self.width = 400
         self.height = 200
 
+        # File to be encrypted
+        self.file = ""
+
         # Create the tabs
         self.note = ttk.Notebook(self.parent)
         self.tab1 = ttk.Frame(self.note)
@@ -39,8 +42,12 @@ class App(tk.Frame):
         self.add_widgets()
 
         # Beginning output messages
-        App.output_area.insert(tk.INSERT, "KINTERCRYPT LOG:\n")
-        App.output_area.insert(tk.INSERT, f"{ctime()} - kintercrypt started\n")
+        App.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
+        self.log_output('kintercrypt started')
+
+    def log_output(self, text) -> None:
+        # Formats the output to show the time
+        App.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
 
     def configure_app(self) -> None:
         # Sets up properties of the main window
@@ -100,12 +107,12 @@ class App(tk.Frame):
 
     def choose_file(self) -> None:
         # Creates a file dialog object
-        file: str = askopenfilename()
+        self.file = askopenfilename()
 
-        if file != "":  # If file selector is opened, but no file is chosen
-            App.output_area.insert(tk.INSERT, f"{ctime()} - No file chosen")
+        if self.file == "":  # If file selector is opened, but no file is chosen
+            self.log_output("No file chosen")
         else:
-            App.output_area.insert(tk.INSERT, f"{ctime()} - {file} Chosen\n")
+            self.log_output(str(self.file) + " chosen")
 
 
 def main() -> None:
