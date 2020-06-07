@@ -2,6 +2,7 @@ from tkinter.filedialog import askopenfilename
 from tkinter import scrolledtext
 import tkinter.ttk as ttk
 import tkinter as tk
+from time import ctime
 
 
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
@@ -37,6 +38,10 @@ class App(tk.Frame):
         self.configure_app()
         self.add_widgets()
 
+        # Beginning output messages
+        App.output_area.insert(tk.INSERT, "KINTERCRYPT LOG:\n")
+        App.output_area.insert(tk.INSERT, f"{ctime()} - kintercrypt started\n")
+
     def configure_app(self) -> None:
         # Sets up properties of the main window
         self.parent.title("kintercrypt")
@@ -53,12 +58,6 @@ class App(tk.Frame):
         self.tab1.grid_rowconfigure(0, minsize=40)  # Prevents password area from being squashed
 
     def add_widgets(self) -> None:
-        # Adds widgets so that the match the background colour
-        # .pack() centres the elements and then places it in the parent widget
-
-        # Use of self.parent rather than window from:
-        # https://dev.to/abdurrahmaanj/building-an-oop-calculator-and-what-it-means-to-write-a-widget-library-4560z
-        # This works since the first paramater represents the parent window
 
         # Password Label
         ttk.Label(
@@ -84,7 +83,7 @@ class App(tk.Frame):
         # TODO: Create a subclass of tk.button to simplify process
         ttk.Button(
             button_area,
-            text="Upload file",
+            text="Choose file",
             command=self.choose_file,
         ).grid(row=1, column=0, sticky="WE", pady=10)  # Padding for the middle button spaces all buttons
 
@@ -93,15 +92,20 @@ class App(tk.Frame):
             text="Start",
         ).grid(row=2, column=0, sticky="WE")
 
-        output_area = scrolledtext.ScrolledText(self.tab1,
-                                                wrap=tk.WORD,
-                                                state='disabled')  # Prevents user from typing in it
+        # Outputs diagnostic results of encryption
+        App.output_area = scrolledtext.ScrolledText(self.tab1,
+                                                    wrap=tk.WORD)
 
-        output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
+        App.output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
 
     def choose_file(self) -> None:
         # Creates a file dialog object
         file: str = askopenfilename()
+
+        if file != "":  # If file selector is opened, but no file is chosen
+            App.output_area.insert(tk.INSERT, f"{ctime()} - No file chosen")
+        else:
+            App.output_area.insert(tk.INSERT, f"{ctime()} - {file} Chosen\n")
 
 
 def main() -> None:
