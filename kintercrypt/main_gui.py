@@ -46,7 +46,8 @@ class App(tk.Frame):
         App.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
         self.log_output('kintercrypt started')
 
-    def log_output(self, text: str) -> None:
+    @staticmethod  # Doesn't reference the class or instance
+    def log_output(text: str) -> None:
         # Formats the output to show the time
         App.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
 
