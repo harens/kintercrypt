@@ -1,10 +1,12 @@
 language: python
+sudo: false
 python:
   - "3.6"
 install:
   - pip install pytest
+  - pip install pytest-cov
   - pip install coveralls
 script:
-  -  coverage run -m pytest
+  - pytest --cov=kintercrypt/
 after_success:
   - coveralls
