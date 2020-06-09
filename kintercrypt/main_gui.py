@@ -3,6 +3,7 @@ from tkinter import scrolledtext
 import tkinter.ttk as ttk
 import tkinter as tk
 from time import ctime
+import sys
 
 
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
@@ -109,7 +110,7 @@ class App(tk.Frame):
         # Creates a file dialog object
         self.file = askopenfilename()
 
-        if self.file == "":  # If file selector is opened, but no file is chosen
+        if not self.file:  # If file selector is opened, but no file is chosen
             self.log_output("No file chosen")
         else:
             self.log_output(str(self.file) + " chosen")
@@ -124,4 +125,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

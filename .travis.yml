@@ -7,6 +7,6 @@ install:
   - pip install pytest-cov
   - pip install coveralls
 script:
-  - pytest --cov=kintercrypt/
+  - pytest --cov=kintercrypt/ --cov-report term-missing
 after_success:
   - coveralls
