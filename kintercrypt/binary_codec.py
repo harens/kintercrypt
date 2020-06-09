@@ -1,6 +1,7 @@
 import textwrap
 
 
+# TODO: Make sure that the file isn't empty
 def string_binary(text):
     # This conversion is based on unicode code points
     # Technically UTF-8 and UTF-16 aren't fixed width, which makes it harder to decode
