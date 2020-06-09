@@ -1,8 +1,9 @@
 import textwrap
+from typing import Tuple
 
 
 # TODO: Make sure that the file isn't empty
-def string_binary(text):
+def string_binary(text: str) -> Tuple[int, str]:
     # This conversion is based on unicode code points
     # Technically UTF-8 and UTF-16 aren't fixed width, which makes it harder to decode
     # Although UTF-32 is, this is easier to code in python and requires less bits
@@ -22,7 +23,7 @@ def string_binary(text):
     return longest_length, ''.join(binary_list)
 
 
-def binary_string(chunk_length, binary):
+def binary_string(chunk_length: int, binary: str) -> str:
     # The chain of binary is broken down into chunks
     binary_chunks = textwrap.wrap(binary, chunk_length)
     # Each value is converted from binary into its decimal unicode code point
