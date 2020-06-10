@@ -14,11 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
 
-from kintercrypt import main_gui
+"""Main GUI Tests
+
+This script tests various aspects of the front end tkinter gui
+"""
+
 import tkinter as tk
+from kintercrypt import main_gui
 
 
-# TODO: Improve gui testing
 # Since its quite difficult to test tkinter, the tests are currently very basic
 def test() -> None:
+    """Creates a new instance of the GUI class"""
     main_gui.App(tk.Tk())

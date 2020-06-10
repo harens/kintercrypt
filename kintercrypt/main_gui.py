@@ -14,16 +14,41 @@
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Front end tkinter GUI
+
+This module sets up the GUI for kintercrypt, including the various tkinter widgets and properties
+"""
+
 from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
-import tkinter.ttk as ttk
+from tkinter import ttk
 import tkinter as tk
 from time import ctime
 
 
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
-# This configures the main window
-class App(tk.Frame):
+# too-many-ancestors is disabled since the parent class itself has too many ancestors
+class App(tk.Frame):  # pylint: disable=too-many-ancestors
+    """Configures the main window
+
+    Attributes:
+
+        parent: The parent class, which in this case is an instance of Tk
+
+        width: Minimum possible window width
+        height: Minimum possible window height
+
+        file: The file to be encrypted/decrypted
+
+        note: The notebook interface
+        tab1: General tab
+        tab2: Settings tab
+        tab3: About tab
+
+        output_area: Outputs diagnostic results of encryption
+
+    """
+
     def __init__(self, parent: tk.Tk, **kw: object) -> None:
         # Suggested in the Frame docs
         # Inherit the properties of the parent class
@@ -36,7 +61,7 @@ class App(tk.Frame):
         self.width = 400
         self.height = 200
 
-        # File to be encrypted
+        # File to be encrypted/decrypted
         self.file = ""
 
         # Create the tabs
@@ -65,11 +90,16 @@ class App(tk.Frame):
         self.log_output("kintercrypt started")
 
     def log_output(self, text: str) -> None:
-        # Formats the output to show the time
+        """Formats the output to show the time
+
+        Args:
+            text: Text to be displayed in the log
+
+        """
         self.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
 
     def configure_app(self) -> None:
-        # Sets up properties of the main window
+        """Sets up properties of the main window"""
         self.parent.title("kintercrypt")
         self.parent.geometry(
             f"{self.width + 100}x{self.height + 100}"
@@ -90,6 +120,7 @@ class App(tk.Frame):
         )  # Prevents password area from being squashed
 
     def add_widgets_tab1(self) -> None:
+        """Sets up widgets for the general tab"""
 
         # Password Label
         ttk.Label(self.tab1, text="Password:").grid(row=0, column=0)
@@ -111,7 +142,6 @@ class App(tk.Frame):
             row=0, column=0
         )  # Seperate grid so that the widget isn't assigned as None
 
-        # TODO: Create a subclass of tk.button to simplify process
         ttk.Button(button_area, text="Choose file", command=self.choose_file).grid(
             row=1, column=0, sticky="WE", pady=10
         )  # Padding for the middle button spaces all buttons
@@ -121,6 +151,7 @@ class App(tk.Frame):
         self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
 
     def choose_file(self) -> None:
+        """Allows the user to choose a file, and detects if one has been selected"""
         # Creates a file dialog object
         self.file = askopenfilename()
 
@@ -131,6 +162,8 @@ class App(tk.Frame):
 
 
 def main() -> None:
+    """Creates an instance of the App class as the main window and monitors events"""
+
     # Creates the main window
     window = App(tk.Tk())
 

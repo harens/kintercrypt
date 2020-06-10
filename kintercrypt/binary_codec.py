@@ -14,13 +14,28 @@
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Binary codec
+
+This module contains two functions that convert between a string and binary
+"""
+
 import textwrap
 from typing import Tuple
 
 
 # TODO: Make sure that the file isn't empty
 def string_binary(text: str) -> Tuple[int, str]:
-    # This conversion is based on unicode code points
+    """Convert a string into binary
+
+    This conversion is based on unicode code points
+
+    Args:
+        text: The text to be convertede
+
+    Returns:
+        A tuple. The first value represents the length of a binary block,
+        where each block can be converted back into readable text. The second value is the binary
+    """
     # Technically UTF-8 and UTF-16 aren't fixed width, which makes it harder to decode
     # Although UTF-32 is, this is easier to code in python and requires less bits
 
@@ -40,6 +55,15 @@ def string_binary(text: str) -> Tuple[int, str]:
 
 
 def binary_string(chunk_length: int, binary: str) -> str:
+    """Convert binary into a string
+
+        Args:
+            chunk_length: The length of a block of binary, where each block can be converted
+            binary: The binary to be decoded
+
+        Returns:
+            A string representing the binary converted into readable text
+        """
     # The chain of binary is broken down into chunks
     binary_chunks = textwrap.wrap(binary, chunk_length)
     # Each value is converted from binary into its decimal unicode code point

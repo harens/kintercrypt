@@ -14,10 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Binary Codec Tests
+
+This script tests various aspects of the two binary codec functions
+"""
+
 from kintercrypt.binary_codec import binary_string, string_binary
 
 
 def test_both() -> None:
+    """Tests codec with characters of varying difficulty
+
+    Both are tested simultaneously, be encoding a value and then decoding it
+
+    """
     assert binary_string(*string_binary("Hello World")) == "Hello World"
     assert binary_string(*string_binary("123ę")) == "123ę"
     assert binary_string(*string_binary(" ")) == " "
