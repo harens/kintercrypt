@@ -15,7 +15,7 @@
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
 
 from tkinter.filedialog import askopenfilename
-from tkinter import scrolledtext
+from tkinter.scrolledtext import ScrolledText
 import tkinter.ttk as ttk
 import tkinter as tk
 from time import ctime
@@ -24,7 +24,6 @@ from time import ctime
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
 # This configures the main window
 class App(tk.Frame):
-
     def __init__(self, parent: tk.Tk, **kw: object) -> None:
         # Suggested in the Frame docs
         # Inherit the properties of the parent class
@@ -55,8 +54,7 @@ class App(tk.Frame):
 
         # Outputs diagnostic results of encryption
         # It's not in an "add widgets" method since it needs to be accessed by other methods
-        self.output_area = scrolledtext.ScrolledText(self.tab1,
-                                                     wrap=tk.WORD)
+        self.output_area = ScrolledText(self.tab1, wrap=tk.WORD)
 
         # Methods to arrange the app
         self.configure_app()
@@ -64,7 +62,7 @@ class App(tk.Frame):
 
         # Beginning output messages
         self.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
-        self.log_output('kintercrypt started')
+        self.log_output("kintercrypt started")
 
     def log_output(self, text: str) -> None:
         # Formats the output to show the time
@@ -73,7 +71,9 @@ class App(tk.Frame):
     def configure_app(self) -> None:
         # Sets up properties of the main window
         self.parent.title("kintercrypt")
-        self.parent.geometry(f"{self.width + 100}x{self.height + 100}")  # 100x100 bigger than minimum size
+        self.parent.geometry(
+            f"{self.width + 100}x{self.height + 100}"
+        )  # 100x100 bigger than minimum size
         self.parent.minsize(self.width, self.height)
 
         # Allows the window to be resizable
@@ -82,19 +82,20 @@ class App(tk.Frame):
             self.tab1.rowconfigure(axis, weight=1)
             self.tab1.columnconfigure(axis, weight=1)
 
-        self.tab1.grid_columnconfigure(0, minsize=110)  # Prevents buttons from being squashed
-        self.tab1.grid_rowconfigure(0, minsize=40)  # Prevents password area from being squashed
+        self.tab1.grid_columnconfigure(
+            0, minsize=110
+        )  # Prevents buttons from being squashed
+        self.tab1.grid_rowconfigure(
+            0, minsize=40
+        )  # Prevents password area from being squashed
 
     def add_widgets_tab1(self) -> None:
 
         # Password Label
-        ttk.Label(
-            self.tab1,
-            text="Password:",
-        ).grid(row=0, column=0)
+        ttk.Label(self.tab1, text="Password:").grid(row=0, column=0)
 
         # Password Input
-        ttk.Entry(self.tab1, show="*").grid(row=0, column=1, columnspan=3, sticky='WE')
+        ttk.Entry(self.tab1, show="*").grid(row=0, column=1, columnspan=3, sticky="WE")
 
         # Allows the buttons to be in the same grid cell
         button_area = ttk.Frame(self.tab1)
@@ -106,21 +107,18 @@ class App(tk.Frame):
         initial_value.set("Encrypt")
 
         option_menu = ttk.OptionMenu(button_area, initial_value, "Encrypt", "Decrypt")
-        option_menu.grid(row=0, column=0)  # Seperate grid so that the widget isn't assigned as None
+        option_menu.grid(
+            row=0, column=0
+        )  # Seperate grid so that the widget isn't assigned as None
 
         # TODO: Create a subclass of tk.button to simplify process
-        ttk.Button(
-            button_area,
-            text="Choose file",
-            command=self.choose_file,
-        ).grid(row=1, column=0, sticky="WE", pady=10)  # Padding for the middle button spaces all buttons
+        ttk.Button(button_area, text="Choose file", command=self.choose_file).grid(
+            row=1, column=0, sticky="WE", pady=10
+        )  # Padding for the middle button spaces all buttons
 
-        ttk.Button(
-            button_area,
-            text="Start",
-        ).grid(row=2, column=0, sticky="WE")
+        ttk.Button(button_area, text="Start").grid(row=2, column=0, sticky="WE")
 
-        self.output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
+        self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
 
     def choose_file(self) -> None:
         # Creates a file dialog object

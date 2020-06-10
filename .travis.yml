@@ -3,12 +3,13 @@ sudo: false
 python:
   - "3.6"
 services:
-  - xvfb
+  - xvfb  # Allows for tests that require the GUI to run
 install:
   - pip install pytest
   - pip install pytest-cov
   - pip install coveralls
 script:
+  - mypy kintercrypt tests  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
 after_success:
   - coveralls

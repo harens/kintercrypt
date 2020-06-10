@@ -28,7 +28,7 @@ def string_binary(text: str) -> Tuple[int, str]:
 
     # Create a list with the binary values of each character in the text
     # It is first converted to its unicode code point, and this is converted to binary
-    binary_list.extend([format(ord(i), 'b') for i in text])
+    binary_list.extend([format(ord(i), "b") for i in text])
 
     # The length of the longest binary value is determined
     longest_length = len(max(binary_list, key=len))
@@ -36,7 +36,7 @@ def string_binary(text: str) -> Tuple[int, str]:
     # Zeros are added until its binary value is the same fixed length
     binary_list = [i.zfill(longest_length) for i in binary_list]
 
-    return longest_length, ''.join(binary_list)
+    return longest_length, "".join(binary_list)
 
 
 def binary_string(chunk_length: int, binary: str) -> str:
@@ -45,4 +45,4 @@ def binary_string(chunk_length: int, binary: str) -> str:
     # Each value is converted from binary into its decimal unicode code point
     # This is then converted to a character
     final_result = [chr(int(i, 2)) for i in binary_chunks]
-    return ''.join(final_result)
+    return "".join(final_result)
