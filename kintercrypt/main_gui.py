@@ -19,7 +19,6 @@ from tkinter import scrolledtext
 import tkinter.ttk as ttk
 import tkinter as tk
 from time import ctime
-import sys
 
 
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
@@ -54,18 +53,22 @@ class App(tk.Frame):
 
         self.note.pack(fill=tk.BOTH, expand=True)
 
+        # Outputs diagnostic results of encryption
+        # It's not in an "add widgets" method since it needs to be accessed by other methods
+        self.output_area = scrolledtext.ScrolledText(self.tab1,
+                                                     wrap=tk.WORD)
+
         # Methods to arrange the app
         self.configure_app()
-        self.add_widgets()
+        self.add_widgets_tab1()
 
         # Beginning output messages
-        App.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
+        self.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
         self.log_output('kintercrypt started')
 
-    @staticmethod  # Doesn't reference the class or instance
-    def log_output(text: str) -> None:
+    def log_output(self, text: str) -> None:
         # Formats the output to show the time
-        App.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
+        self.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
 
     def configure_app(self) -> None:
         # Sets up properties of the main window
@@ -82,7 +85,7 @@ class App(tk.Frame):
         self.tab1.grid_columnconfigure(0, minsize=110)  # Prevents buttons from being squashed
         self.tab1.grid_rowconfigure(0, minsize=40)  # Prevents password area from being squashed
 
-    def add_widgets(self) -> None:
+    def add_widgets_tab1(self) -> None:
 
         # Password Label
         ttk.Label(
@@ -117,11 +120,7 @@ class App(tk.Frame):
             text="Start",
         ).grid(row=2, column=0, sticky="WE")
 
-        # Outputs diagnostic results of encryption
-        App.output_area = scrolledtext.ScrolledText(self.tab1,
-                                                    wrap=tk.WORD)
-
-        App.output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
+        self.output_area.grid(row=1, column=1, columnspan=3, sticky='WE')
 
     def choose_file(self) -> None:
         # Creates a file dialog object
@@ -142,4 +141,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
