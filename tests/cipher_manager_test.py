@@ -28,4 +28,10 @@ from tests.random_generator import generate_text
     ("text", "password"), [*zip(generate_text(200, 200), generate_text(200, 200))]
 )
 def test_xor(text: str, password: str) -> None:
+    """Tests the XOR cipher by using the fact that (A^B)^B == A
+
+    args:
+        text: Plaintext to be encrypted and decrypted
+        password: Password to encrypt and decrypt the plaintext
+    """
     assert main_cipher(main_cipher(text, password, "XOR"), password, "XOR") == text

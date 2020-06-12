@@ -28,7 +28,8 @@ from tests.random_generator import generate_byte_list
 # Sets the arguments to be random lists of bytes of maximum length 200
 # It repeats this 200 times
 @pytest.mark.parametrize(
-    ("text", "password"), [*zip(generate_byte_list(200, 200), generate_byte_list(200, 200))]
+    ("text", "password"),
+    [*zip(generate_byte_list(200, 200), generate_byte_list(200, 200))],
 )
 def test_xor(text: List[int], password: List[int]) -> None:
     """Tests the XOR cipher by using the fact that (A^B)^B == A

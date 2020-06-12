@@ -20,10 +20,12 @@ from random import sample, randrange
 from typing import Iterator, List
 
 # has to be less than 1114111, since there a limited number of unicode code points
-max_unicode_codepoint = 100000
+MAX_UNICODE_CODEPOINT = 100000
 
 
-def generate_byte_list(number_lists: int = 1, list_length: int = 1) -> Iterator[List[int]]:
+def generate_byte_list(
+    number_lists: int = 1, list_length: int = 1
+) -> Iterator[List[int]]:
     """Generates a random list of bytes
 
     args:
@@ -37,9 +39,10 @@ def generate_byte_list(number_lists: int = 1, list_length: int = 1) -> Iterator[
     # Generates lists with a maximum value of the fixed number in the range
     for _ in range(number_lists):
         # First range represents the maximum value in the list
-        # Can't be less than 32, since this results in control codes (This is accounted for from ciphers)
+        # Can't be less than 32, since this results in control codes
+        # (This is accounted for if the ciphers produce a value less than 32)
         # Minimum length has to be 1 (again accounted for if there is no password or file is empty)
-        yield sample(range(32, max_unicode_codepoint), randrange(1, list_length))
+        yield sample(range(32, MAX_UNICODE_CODEPOINT), randrange(1, list_length))
 
 
 def generate_text(number_text: int, text_length: int) -> Iterator[str]:
@@ -56,4 +59,4 @@ def generate_text(number_text: int, text_length: int) -> Iterator[str]:
     # Takes random lists of bytes
     for value in list(generate_byte_list(number_text, text_length)):
         # Converts the lists of bytes to unicode
-        yield ''.join(chr(i) for i in value)
+        yield "".join(chr(i) for i in value)

@@ -45,7 +45,7 @@ def bytes_string(bytes_list: List[int]) -> str:
     Returns:
         A string that is the result of the conversion"""
 
-    # 32 is added in case some bytes that result from the various ciphers correspond to control codes
+    # 32 added in case some bytes that result from the various ciphers correspond to control codes
     # These control codes make things a bit difficult, so its easier to shift everything by 32
     # Values after 32 correspond to symbols that aren't control codes
     return "".join(chr(i + 32) for i in bytes_list)

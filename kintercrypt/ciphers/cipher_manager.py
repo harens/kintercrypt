@@ -19,6 +19,7 @@
 This module contains a function to chooses which cipher is necessary
 """
 
+from typing import List
 from kintercrypt.ciphers.xor_cipher import xor_cipher
 import kintercrypt.bytes_codec as codec
 
@@ -42,7 +43,7 @@ def main_cipher(
     plaintext_bytes = codec.string_bytes(text)
     password_bytes = codec.string_bytes(password)
 
-    bytes_result = ""
+    bytes_result: List[int] = []
 
     if algorithm == "XOR":
         bytes_result = xor_cipher(plaintext_bytes, password_bytes)
