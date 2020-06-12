@@ -22,15 +22,16 @@ This module contains two functions that convert between a string and binary
 import textwrap
 from typing import Tuple
 
+longest_length = 21
 
-# TODO: Make sure that the file isn't empty
-def string_binary(text: str) -> Tuple[int, str]:
+
+def string_binary(text: str) -> str:
     """Convert a string into binary
 
     This conversion is based on unicode code points
 
     Args:
-        text: The text to be convertede
+        text: The text to be converted
 
     Returns:
         A tuple. The first value represents the length of a binary block,
@@ -43,18 +44,15 @@ def string_binary(text: str) -> Tuple[int, str]:
 
     # Create a list with the binary values of each character in the text
     # It is first converted to its unicode code point, and this is converted to binary
-    binary_list.extend([format(ord(i), "b") for i in text])
-
-    # The length of the longest binary value is determined
-    longest_length = len(max(binary_list, key=len))
+    binary_list.extend([format(ord(i) - 32, "b") for i in text])
 
     # Zeros are added until its binary value is the same fixed length
     binary_list = [i.zfill(longest_length) for i in binary_list]
 
-    return longest_length, "".join(binary_list)
+    return "".join(binary_list)
 
 
-def binary_string(chunk_length: int, binary: str) -> str:
+def binary_string(binary: str) -> str:
     """Convert binary into a string
 
         Args:
@@ -65,8 +63,8 @@ def binary_string(chunk_length: int, binary: str) -> str:
             A string representing the binary converted into readable text
         """
     # The chain of binary is broken down into chunks
-    binary_chunks = textwrap.wrap(binary, chunk_length)
+    binary_chunks = textwrap.wrap(binary, longest_length)
     # Each value is converted from binary into its decimal unicode code point
     # This is then converted to a character
-    final_result = [chr(int(i, 2)) for i in binary_chunks]
+    final_result = [chr(int(i, 2) + 32) for i in binary_chunks]
     return "".join(final_result)
