@@ -17,27 +17,32 @@
 """Binary Codec Tests
 
 This script tests various aspects of the two binary codec functions
+Tests codec with characters of varying difficulty
+Both are tested simultaneously, be encoding a value and then decoding it
 """
 
 from kintercrypt.binary_codec import binary_string, string_binary
 
 
-def test_both() -> None:
-    """Tests codec with characters of varying difficulty
+def test_simple() -> None:
+    """More Simple characters"""
+    assert binary_string(string_binary("Hello World")) == "Hello World"
+    assert binary_string(string_binary("123ę")) == "123ę"
+    assert binary_string(string_binary(" ")) == " "
 
-    Both are tested simultaneously, be encoding a value and then decoding it
+# The following examples are from https://stackoverflow.com/a/51539774/10763533
 
-    """
-    assert binary_string(*string_binary("Hello World")) == "Hello World"
-    assert binary_string(*string_binary("123ę")) == "123ę"
-    assert binary_string(*string_binary(" ")) == " "
 
-    # The following examples are from https://stackoverflow.com/a/51539774/10763533
-    # Emoji
-    assert binary_string(*string_binary("👱👱🏻👱🏼👱🏽👱🏾👱🏿")) == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
-    assert binary_string(*string_binary("🧟‍♀️🧟‍♂️")) == "🧟‍♀️🧟‍♂️"
-    assert binary_string(*string_binary("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️")) == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
+def test_emoji() -> None:
+    """Unicode Emojis"""
+    assert binary_string(string_binary("👱👱🏻👱🏼👱🏽👱🏾👱🏿")) == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
+    assert binary_string(string_binary("🧟‍♀️🧟‍♂️")) == "🧟‍♀️🧟‍♂️"
+    assert binary_string(string_binary("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️")) == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
+
+
+def test_other() -> None:
+    """Characters that do not match the other groups"""
 
     # Words in different directions
-    assert binary_string(*string_binary("اختبار النص")) == "اختبار النص"
-    assert binary_string(*string_binary("اليسار")) == "اليسار"
+    assert binary_string(string_binary("اختبار النص")) == "اختبار النص"
+    assert binary_string(string_binary("اليسار")) == "اليسار"
