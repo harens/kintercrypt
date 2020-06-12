@@ -19,16 +19,29 @@
 This module contains the function that is able to both encrypt and decrypt text using the xor cipher
 """
 
+from typing import List
 
-def xor_cipher(text: str, password: str) -> str:
+
+def xor_cipher(text: List[int], password: List[int]) -> List[int]:
+    """A function that performs the XOR operator on some text and a password
+
+    args:
+        text: A list of bytes to encrypt
+        password: A list of bytes that represents the password
+
+    returns:
+        A list of bytes that represents the text ^ password
+    """
     text_length = len(text)
     password_length = len(password)
 
-    if password_length > text_length:
-        password = password[:text_length]
+    # If the password is longer than the text, that is fine
+    # This is ince zip() deals with the issue
 
-    elif password_length < text_length:
+    if password_length < text_length:
+        # This makes the password longer than required
+        # It isn't necessary to shorten it, since zip does this for us
         password = password * (text_length // password_length + 1)
-        password = password[:text_length]
 
-    return ''.join([str(int(char) ^ int(password[pos])) for (pos, char) in enumerate(text)])
+    # Performs the xor operator on each element in the two lists
+    return [(a ^ b) for (a, b) in zip(text, password)]

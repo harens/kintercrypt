@@ -21,28 +21,29 @@ Tests codec with characters of varying difficulty
 Both are tested simultaneously, be encoding a value and then decoding it
 """
 
-from kintercrypt.binary_codec import binary_string, string_binary
+from kintercrypt.bytes_codec import bytes_string, string_bytes
 
 
 def test_simple() -> None:
     """More Simple characters"""
-    assert binary_string(string_binary("Hello World")) == "Hello World"
-    assert binary_string(string_binary("123ę")) == "123ę"
-    assert binary_string(string_binary(" ")) == " "
+    assert bytes_string(string_bytes("Hello World")) == "Hello World"
+    assert bytes_string(string_bytes("123ę")) == "123ę"
+    assert bytes_string(string_bytes(" ")) == " "
+
 
 # The following examples are from https://stackoverflow.com/a/51539774/10763533
 
 
 def test_emoji() -> None:
     """Unicode Emojis"""
-    assert binary_string(string_binary("👱👱🏻👱🏼👱🏽👱🏾👱🏿")) == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
-    assert binary_string(string_binary("🧟‍♀️🧟‍♂️")) == "🧟‍♀️🧟‍♂️"
-    assert binary_string(string_binary("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️")) == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
+    assert bytes_string(string_bytes("👱👱🏻👱🏼👱🏽👱🏾👱🏿")) == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
+    assert bytes_string(string_bytes("🧟‍♀️🧟‍♂️")) == "🧟‍♀️🧟‍♂️"
+    assert bytes_string(string_bytes("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️")) == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
 
 
 def test_other() -> None:
     """Characters that do not match the other groups"""
 
     # Words in different directions
-    assert binary_string(string_binary("اختبار النص")) == "اختبار النص"
-    assert binary_string(string_binary("اليسار")) == "اليسار"
+    assert bytes_string(string_bytes("اختبار النص")) == "اختبار النص"
+    assert bytes_string(string_bytes("اليسار")) == "اليسار"

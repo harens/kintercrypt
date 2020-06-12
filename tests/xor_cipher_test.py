@@ -19,24 +19,37 @@
 Generates a random password and text and checks if it is encrypted/decrypted successfully
 """
 
-from random import randint
+from random import sample
+from typing import Iterator, List
 import pytest
-from typing import Iterator
 from kintercrypt.ciphers.xor_cipher import xor_cipher
 
 
-def generate_binary(length: int) -> Iterator[str]:
-    """Generates random binary numbers upto some length"""
+def generate_byte_list(length: int) -> Iterator[List[int]]:
+    """Generates a random list of bytes
 
-    # Generates 'length' amount of numbers
-    # If current_length was 0, the output would be ''
+    args:
+        length: An integer representing the maximum length of the generated lists
+
+    returns:
+        An iterator that generates a random list of bytes
+    """
+    # Generates lists of every positive length upto the length stated
     for current_length in range(1, length + 1):
-        # Generates a number between 0 and 1 that is the same length as current_length
-        yield ''.join(str(randint(0, 1)) for _ in range(current_length))
+        # Maximum possible value in the list is set in the range
+        yield sample(range(20000), current_length)
 
 
-# Sets the text and password as random binary digits upto some length
-@pytest.mark.parametrize(('text', 'password'), [*zip(generate_binary(100), generate_binary(100))])
-def test_xor(text: str, password: str) -> None:
-    """Tests the XOR cipher by using the fact that (A^B)^B == A"""
+# Sets the arguments to be random lists of bytes
+@pytest.mark.parametrize(
+    ("text", "password"), [*zip(generate_byte_list(100), generate_byte_list(100))]
+)
+def test_xor(text: List[int], password: List[int]) -> None:
+    """Tests the XOR cipher by using the fact that (A^B)^B == A
+
+    args:
+        text: The plaintext to be encrypted and decrypted
+        password: The password that is applied to the text via the xor operator
+    """
+
     assert xor_cipher(xor_cipher(text, password), password) == text
