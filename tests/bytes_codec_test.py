@@ -22,6 +22,8 @@ Both are tested simultaneously, be encoding a value and then decoding it
 """
 
 from kintercrypt.bytes_codec import bytes_string, string_bytes
+from tests.random_generator import generate_text
+import pytest
 
 
 def test_simple() -> None:
@@ -47,3 +49,12 @@ def test_other() -> None:
     # Words in different directions
     assert bytes_string(string_bytes("اختبار النص")) == "اختبار النص"
     assert bytes_string(string_bytes("اليسار")) == "اليسار"
+
+
+# Generates 200 strings of length 200 of random unicode
+@pytest.mark.parametrize(
+    "text", [*(generate_text(200, 200))]
+)
+def test_random(text) -> None:
+    assert bytes_string(string_bytes(text)) == text
+
