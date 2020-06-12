@@ -21,10 +21,11 @@ Generates a random password and text and checks if it is encrypted/decrypted suc
 
 from random import randint
 import pytest
+from typing import Iterator
 from kintercrypt.ciphers.xor_cipher import xor_cipher
 
 
-def generate_binary(length: int) -> str:
+def generate_binary(length: int) -> Iterator[str]:
     """Generates random binary numbers upto some length"""
 
     # Generates 'length' amount of numbers
