@@ -11,7 +11,7 @@ install:
   - pip install coveralls
   - pip install mypy
 script:
-  - mypy kintercrypt tests  # Type checking
+  - mypy kintercrypt tests --config-file=tox.ini  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
 after_success:
   - coveralls

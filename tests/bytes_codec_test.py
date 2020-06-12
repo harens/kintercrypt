@@ -51,10 +51,11 @@ def test_other() -> None:
     assert bytes_string(string_bytes("اليسار")) == "اليسار"
 
 
-# Generates 200 strings of length 200 of random unicode
+# Generates 200 strings of max length 200 of random unicode
 @pytest.mark.parametrize(
     "text", [*(generate_text(200, 200))]
 )
-def test_random(text) -> None:
+def test_random(text: str) -> None:
+    """Tests with randomly generated strings"""
     assert bytes_string(string_bytes(text)) == text
 
