@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Front end tkinter GUI
 
 This module sets up the GUI for kintercrypt, including the various tkinter widgets and properties
@@ -30,7 +29,8 @@ from kintercrypt.ciphers.cipher_manager import main_cipher
 
 
 # Adapted class structure from https://www.begueradj.com/tkinter-best-practices/
-# too-many-ancestors is disabled since the parent class itself has too many ancestors
+# too-many-ancestors is disabled since the parent class itself has too
+# many ancestors
 class App(tk.Frame):  # pylint: disable=too-many-ancestors
     """Configures the main window
 
@@ -115,9 +115,8 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
     def configure_app(self) -> None:
         """Sets up properties of the main window"""
         self.parent.title("kintercrypt")
-        self.parent.geometry(
-            f"{self.width + 100}x{self.height + 100}"
-        )  # 100x100 bigger than minimum size
+        self.parent.geometry(f"{self.width + 100}x{self.height + 100}"
+                             )  # 100x100 bigger than minimum size
         self.parent.minsize(self.width, self.height)
 
         # Allows the window to be resizable
@@ -127,11 +126,9 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             self.tab1.columnconfigure(axis, weight=1)
 
         self.tab1.grid_columnconfigure(
-            0, minsize=110
-        )  # Prevents buttons from being squashed
+            0, minsize=110)  # Prevents buttons from being squashed
         self.tab1.grid_rowconfigure(
-            0, minsize=40
-        )  # Prevents password area from being squashed
+            0, minsize=40)  # Prevents password area from being squashed
 
     def add_widgets_tab1(self) -> None:
         """Sets up widgets for the general tab"""
@@ -145,20 +142,20 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         self.initial_value.set("Encrypt")
         # Encrypt twice since otherwise, decypt is the only option
-        option_menu = ttk.OptionMenu(
-            button_area, self.initial_value, "Encrypt", "Encrypt", "Decrypt"
-        )
+        option_menu = ttk.OptionMenu(button_area, self.initial_value,
+                                     "Encrypt", "Encrypt", "Decrypt")
         option_menu.grid(
             row=0, column=0
         )  # Separate grid so that the widget isn't assigned as None
 
-        ttk.Button(button_area, text="Choose file", command=self.choose_file).grid(
-            row=1, column=0, sticky="WE", pady=10
-        )  # Padding for the middle button spaces all buttons
+        ttk.Button(
+            button_area, text="Choose file", command=self.choose_file).grid(
+                row=1, column=0, sticky="WE",
+                pady=10)  # Padding for the middle button spaces all buttons
 
-        ttk.Button(button_area, text="Start", command=self.start_cipher).grid(
-            row=2, column=0, sticky="WE"
-        )
+        ttk.Button(
+            button_area, text="Start", command=self.start_cipher).grid(
+                row=2, column=0, sticky="WE")
 
         self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
 
@@ -197,23 +194,22 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
                 self.log_output("ERROR: File is empty")
                 return
 
-            cipher_choice = (
-                self.initial_value.get()
-            )  # Whether the user wants to encrypt or decrypt
+            cipher_choice = (self.initial_value.get()
+                             )  # Whether the user wants to encrypt or decrypt
 
             # Encrypt -> Encryption, etc.
             self.log_output(f"{cipher_choice}ion started")
             start_time = time()
 
-            final_result = main_cipher(
-                file_contents, self.password, "XOR", cipher_choice
-            )
+            final_result = main_cipher(file_contents, self.password, "XOR",
+                                       cipher_choice)
 
         with open(self.file, "w") as result_file:
             result_file.write(final_result)
             finish_time = time()
             total_duration = round(finish_time - start_time, 4)
-            self.log_output(f"{cipher_choice}ion Finished in {total_duration}s!")
+            self.log_output(
+                f"{cipher_choice}ion Finished in {total_duration}s!")
 
 
 def main() -> None:

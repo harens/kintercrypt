@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Binary Codec Tests
 
 This script tests various aspects of the two binary codec functions

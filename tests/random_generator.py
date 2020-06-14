@@ -13,19 +13,18 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """This module generates random data used for various tests"""
 
 from random import sample, randrange
 from typing import Iterator, List
 
-# has to be less than 1114111, since there a limited number of unicode code points
+# has to be less than 1114111, since there a limited number of unicode
+# code points
 MAX_UNICODE_CODEPOINT = 100000
 
 
-def generate_byte_list(
-    number_lists: int = 1, list_length: int = 1
-) -> Iterator[List[int]]:
+def generate_byte_list(number_lists: int = 1,
+                       list_length: int = 1) -> Iterator[List[int]]:
     """Generates a random list of bytes
 
     args:
@@ -41,8 +40,10 @@ def generate_byte_list(
         # First range represents the maximum value in the list
         # Can't be less than 32, since this results in control codes
         # (This is accounted for if the ciphers produce a value less than 32)
-        # Minimum length has to be 1 (again accounted for if there is no password or file is empty)
-        yield sample(range(32, MAX_UNICODE_CODEPOINT), randrange(1, list_length))
+        # Minimum length has to be 1 (again accounted for if there is no
+        # password or file is empty)
+        yield sample(
+            range(32, MAX_UNICODE_CODEPOINT), randrange(1, list_length))
 
 
 def generate_text(number_text: int, text_length: int) -> Iterator[str]:

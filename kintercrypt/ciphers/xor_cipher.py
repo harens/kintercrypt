@@ -13,10 +13,9 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Xor Cipher
 
-This module contains the function that is able to both encrypt and decrypt text using the xor cipher
+This module contains the function that carries out the xor cipher
 """
 
 from typing import List

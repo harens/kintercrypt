@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Bytes codec
 
 This module contains two functions that convert between a string and a list of bytes
@@ -32,7 +31,8 @@ def string_bytes(text: str) -> List[int]:
     """
 
     # 32 is subtracted to allow 32 to be added below
-    # This helps to fix an error with control codes that is described below in the inverse function
+    # This helps to fix an error with control codes that is described below in
+    # the inverse function
     return [ord(i) - 32 for i in text]
 
 

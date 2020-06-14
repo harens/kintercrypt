@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Main GUI Tests
 
 This script tests various aspects of the front end tkinter gui
@@ -40,6 +39,7 @@ def test_choose_file(mocker: MockFixture) -> None:
     WINDOW.start_cipher()
 
     # File chosen
-    mocker.patch("kintercrypt.main_gui.askopenfilename", return_value="example.txt")
+    mocker.patch(
+        "kintercrypt.main_gui.askopenfilename", return_value="example.txt")
     WINDOW.choose_file()
     WINDOW.start_cipher()

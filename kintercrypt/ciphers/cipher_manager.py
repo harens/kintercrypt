@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Cipher manager
 
 This module contains a function to chooses which cipher is necessary
@@ -24,9 +23,10 @@ from kintercrypt.ciphers.xor_cipher import xor_cipher
 import kintercrypt.bytes_codec as codec
 
 
-def main_cipher(
-    text: str, password: str, algorithm: str, cipher: str = "Encrypt"
-) -> str:
+def main_cipher(text: str,
+                password: str,
+                algorithm: str,
+                cipher: str = "Encrypt") -> str:
     """Chooses the necessary cipher and operation
 
     args:

@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """Cipher manager test
 
 Tests the encryption and decryption of the ciphers with unicode rather than a list of bytes
@@ -25,8 +24,8 @@ from tests.random_generator import generate_text
 
 
 @pytest.mark.parametrize(
-    ("text", "password"), [*zip(generate_text(200, 200), generate_text(200, 200))]
-)
+    ("text", "password"),
+    [*zip(generate_text(200, 200), generate_text(200, 200))])
 def test_xor(text: str, password: str) -> None:
     """Tests the XOR cipher by using the fact that (A^B)^B == A
 
@@ -34,4 +33,5 @@ def test_xor(text: str, password: str) -> None:
         text: Plaintext to be encrypted and decrypted
         password: Password to encrypt and decrypt the plaintext
     """
-    assert main_cipher(main_cipher(text, password, "XOR"), password, "XOR") == text
+    assert main_cipher(main_cipher(text, password, "XOR"), password,
+                       "XOR") == text

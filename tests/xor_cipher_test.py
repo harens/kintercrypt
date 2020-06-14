@@ -13,7 +13,6 @@
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with kintercrypt.  If not, see <http://www.gnu.org/licenses/>.
-
 """XOR Cipher Tests
 
 Generates a random password and text and checks if it is encrypted/decrypted successfully
