@@ -20,20 +20,26 @@ This script tests various aspects of the front end tkinter gui
 """
 
 import tkinter as tk
+from pytest_mock import MockFixture
 from kintercrypt import main_gui
 
 # Creates a new instance of the GUI class
-window = main_gui.App(tk.Tk())
+WINDOW = main_gui.App(tk.Tk())
 
 
-def test_choose_file(mocker) -> None:
+def test_choose_file(mocker: MockFixture) -> None:
+    """Runs various methods depending on whether a file has been chosen
+
+    args:
+        mocker: Wrapper for pytest of the mock package
+    """
 
     # File not chosen
-    mocker.patch('kintercrypt.main_gui.askopenfilename', return_value='')
-    window.choose_file()
-    window.start_cipher()
+    mocker.patch("kintercrypt.main_gui.askopenfilename", return_value="")
+    WINDOW.choose_file()
+    WINDOW.start_cipher()
 
     # File chosen
-    mocker.patch('kintercrypt.main_gui.askopenfilename', return_value='demo.txt')
-    window.choose_file()
-    window.start_cipher()
+    mocker.patch("kintercrypt.main_gui.askopenfilename", return_value="example.txt")
+    WINDOW.choose_file()
+    WINDOW.start_cipher()

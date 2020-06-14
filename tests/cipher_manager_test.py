@@ -19,8 +19,8 @@
 Tests the encryption and decryption of the ciphers with unicode rather than a list of bytes
 """
 
-from kintercrypt.ciphers.cipher_manager import main_cipher
 import pytest
+from kintercrypt.ciphers.cipher_manager import main_cipher
 from tests.random_generator import generate_text
 
 

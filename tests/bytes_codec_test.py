@@ -21,9 +21,9 @@ Tests codec with characters of varying difficulty
 Both are tested simultaneously, be encoding a value and then decoding it
 """
 
+import pytest
 from kintercrypt.bytes_codec import bytes_string, string_bytes
 from tests.random_generator import generate_text
-import pytest
 
 
 def test_simple() -> None:
@@ -52,10 +52,7 @@ def test_other() -> None:
 
 
 # Generates 200 strings of max length 200 of random unicode
-@pytest.mark.parametrize(
-    "text", [*(generate_text(200, 200))]
-)
+@pytest.mark.parametrize("text", [*(generate_text(200, 200))])
 def test_random(text: str) -> None:
     """Tests with randomly generated strings"""
     assert bytes_string(string_bytes(text)) == text
-
