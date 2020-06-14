@@ -22,8 +22,18 @@ This script tests various aspects of the front end tkinter gui
 import tkinter as tk
 from kintercrypt import main_gui
 
+# Creates a new instance of the GUI class
+window = main_gui.App(tk.Tk())
 
-# Since its quite difficult to test tkinter, the tests are currently very basic
-def test() -> None:
-    """Creates a new instance of the GUI class"""
-    main_gui.App(tk.Tk())
+
+def test_choose_file(mocker) -> None:
+
+    # File not chosen
+    mocker.patch('kintercrypt.main_gui.askopenfilename', return_value='')
+    window.choose_file()
+    window.start_cipher()
+
+    # File chosen
+    mocker.patch('kintercrypt.main_gui.askopenfilename', return_value='demo.txt')
+    window.choose_file()
+    window.start_cipher()
