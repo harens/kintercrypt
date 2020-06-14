@@ -42,4 +42,19 @@ def test_choose_file(mocker: MockFixture) -> None:
     mocker.patch(
         "kintercrypt.main_gui.askopenfilename", return_value="example.txt")
     WINDOW.choose_file()
+
+
+def test_file_contents(mocker: MockFixture) -> None:
+    """Runs the start cipher method with different file contents
+
+        args:
+            mocker: Wrapper for pytest of the mock package
+    """
+
+    # File is empty
+    mocker.patch("kintercrypt.main_gui.getsize", return_value=0)
+    WINDOW.start_cipher()
+
+    # File has contents
+    mocker.patch("kintercrypt.main_gui.getsize", return_value=1)
     WINDOW.start_cipher()

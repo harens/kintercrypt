@@ -19,7 +19,7 @@ This module sets up the GUI for kintercrypt, including the various tkinter widge
 """
 
 from pathlib import Path
-import os
+from os.path import getsize
 from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
 from tkinter import ttk
@@ -177,8 +177,14 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         It then writes it to a new file
 
         """
+
+        # Various errors that can occur
         if not self.file:
             self.log_output("ERROR: File not chosen")
+            return
+
+        if not getsize(self.file):
+            self.log_output("ERROR: File is empty")
             return
 
         self.password = self.password_entry.get()
@@ -190,26 +196,23 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         # Opens the chosen file as read only
         with open(self.file, "r") as chosen_file:
             file_contents = chosen_file.read()
-            if not os.path.getsize(self.file):
-                self.log_output("ERROR: File is empty")
-                return
 
-            cipher_choice = (self.initial_value.get()
-                             )  # Whether the user wants to encrypt or decrypt
+        cipher_choice = (self.initial_value.get()
+                         )  # Whether the user wants to encrypt or decrypt
 
-            # Encrypt -> Encryption, etc.
-            self.log_output(f"{cipher_choice}ion started")
-            start_time = time()
+        # Encrypt -> Encryption, etc.
+        self.log_output(f"{cipher_choice}ion started")
+        start_time = time()
 
-            final_result = main_cipher(file_contents, self.password, "XOR",
-                                       cipher_choice)
+        final_result = main_cipher(file_contents, self.password, "XOR",
+                                   cipher_choice)
 
         with open(self.file, "w") as result_file:
             result_file.write(final_result)
-            finish_time = time()
-            total_duration = round(finish_time - start_time, 4)
-            self.log_output(
-                f"{cipher_choice}ion Finished in {total_duration}s!")
+
+        finish_time = time()
+        total_duration = round(finish_time - start_time, 4)
+        self.log_output(f"{cipher_choice}ion Finished in {total_duration}s!")
 
 
 def main() -> None:
