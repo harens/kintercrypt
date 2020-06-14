@@ -10,6 +10,7 @@ install:
   - pip install pytest-cov
   - pip install coveralls
   - pip install mypy
+  - pip install pytest_mock
 script:
   - mypy kintercrypt tests --config-file=tox.ini  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
