@@ -193,16 +193,16 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             self.log_output("ERROR: Password not set")
             return
 
-        # Opens the chosen file as read only
-        with open(self.file, "r") as chosen_file:
-            file_contents = chosen_file.read()
-
         cipher_choice = (self.initial_value.get()
                          )  # Whether the user wants to encrypt or decrypt
 
         # Encrypt -> Encryption, etc.
         self.log_output(f"{cipher_choice}ion started")
         start_time = time()
+
+        # Opens the chosen file as read only
+        with open(self.file, "r") as chosen_file:
+            file_contents = chosen_file.read()
 
         final_result = main_cipher(file_contents, self.password, "XOR",
                                    cipher_choice)
