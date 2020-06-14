@@ -203,6 +203,7 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
             # Encrypt -> Encryption, etc.
             self.log_output(f"{cipher_choice}ion started")
+            start_time = time()
 
             final_result = main_cipher(
                 file_contents, self.password, "XOR", cipher_choice
@@ -210,7 +211,9 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         with open(self.file, "w") as result_file:
             result_file.write(final_result)
-            self.log_output(f"{cipher_choice}ion Finished!")
+            finish_time = time()
+            total_duration = round(finish_time - start_time, 4)
+            self.log_output(f"{cipher_choice}ion Finished in {total_duration}s!")
 
 
 def main() -> None:
