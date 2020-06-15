@@ -85,9 +85,10 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         # This is since it needs to be accessed by other methods
         self.output_area = ScrolledText(self.tab1, wrap=tk.WORD)
 
-        # Choose between encrypt and decrypt
+        # Choose between encrypt and decrypt and which cipher
         # Based off http://effbot.org/tkinterbook/optionmenu.htm
-        self.initial_value = tk.StringVar(self.tab1)
+        self.initial_crypt = tk.StringVar(self.tab1)
+        self.initial_cipher = tk.StringVar(self.tab2)
 
         # Password Input
         self.password_entry = ttk.Entry(self.tab1, show="*")
@@ -98,6 +99,7 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         # Methods to arrange the app
         self.configure_app()
         self.add_widgets_tab1()
+        self.add_widgets_tab2()
 
         # Beginning output messages
         self.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
@@ -125,6 +127,10 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             self.tab1.rowconfigure(axis, weight=1)
             self.tab1.columnconfigure(axis, weight=1)
 
+        for axis in range(2):
+            self.tab2.rowconfigure(axis, weight=1)
+            self.tab2.columnconfigure(axis, weight=1)
+
         self.tab1.grid_columnconfigure(
             0, minsize=110)  # Prevents buttons from being squashed
         self.tab1.grid_rowconfigure(
@@ -140,9 +146,9 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         button_area = ttk.Frame(self.tab1)
         button_area.grid(row=1, column=0)
 
-        self.initial_value.set("Encrypt")
+        self.initial_crypt.set("Encrypt")
         # Encrypt twice since otherwise, decypt is the only option
-        option_menu = ttk.OptionMenu(button_area, self.initial_value,
+        option_menu = ttk.OptionMenu(button_area, self.initial_crypt,
                                      "Encrypt", "Encrypt", "Decrypt")
         option_menu.grid(
             row=0, column=0
@@ -158,6 +164,17 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
                 row=2, column=0, sticky="WE")
 
         self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
+
+    def add_widgets_tab2(self) -> None:
+        """Sets up widgets for the cipher tab"""
+        ttk.Label(self.tab2, text="Choose Cipher:").grid(row=0, column=0)
+        self.initial_cipher.set("XOR")
+
+        option_menu = ttk.OptionMenu(self.tab2, self.initial_cipher,
+                                     "XOR", "XOR")
+        option_menu.grid(
+            row=0, column=1
+        )  # Separate grid so that the widget isn't assigned as None
 
     def choose_file(self) -> None:
         """Allows the user to choose a file, and detects if one has been selected"""
@@ -193,26 +210,29 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             self.log_output("ERROR: Password not set")
             return
 
-        cipher_choice = (self.initial_value.get()
+        crypt_choice = (self.initial_crypt.get()
                          )  # Whether the user wants to encrypt or decrypt
 
+        # User's choice of encryption algorithm
+        cipher_choice = (self.initial_cipher.get())
+
         # Encrypt -> Encryption, etc.
-        self.log_output(f"{cipher_choice}ion started")
+        self.log_output(f"{crypt_choice}ion started")
         start_time = time()
 
         # Opens the chosen file as read only
         with open(self.file, "r") as chosen_file:
             file_contents = chosen_file.read()
 
-        final_result = main_cipher(file_contents, self.password, "XOR",
-                                   cipher_choice)
+        final_result = main_cipher(file_contents, self.password, cipher_choice,
+                                   crypt_choice)
 
         with open(self.file, "w") as result_file:
             result_file.write(final_result)
 
         finish_time = time()
         total_duration = round(finish_time - start_time, 4)
-        self.log_output(f"{cipher_choice}ion Finished in {total_duration}s!")
+        self.log_output(f"{crypt_choice}ion Finished in {total_duration}s!")
 
 
 def main() -> None:

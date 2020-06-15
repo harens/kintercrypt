@@ -26,14 +26,14 @@ import kintercrypt.bytes_codec as codec
 def main_cipher(text: str,
                 password: str,
                 algorithm: str,
-                cipher: str = "Encrypt") -> str:
+                crypt: str = "Encrypt") -> str:
     """Chooses the necessary cipher and operation
 
     args:
         text: The text to encrypt/decrypt
         password: The password to encrypt/decrypt the text
         algorithm: The function to encrypt/decrypt the text
-        cipher: Whether the user wants to encrypt or decrypt
+        crypt: Whether the user wants to encrypt or decrypt
 
     returns:
         The final result of the encryption/decryption process
