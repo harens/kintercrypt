@@ -42,8 +42,8 @@ def generate_byte_list(number_lists: int = 1,
         # (This is accounted for if the ciphers produce a value less than 32)
         # Minimum length has to be 1 (again accounted for if there is no
         # password or file is empty)
-        yield sample(
-            range(32, MAX_UNICODE_CODEPOINT), randrange(1, list_length))
+        yield sample(range(32, MAX_UNICODE_CODEPOINT),
+                     randrange(1, list_length))
 
 
 def generate_text(number_text: int, text_length: int) -> Iterator[str]:

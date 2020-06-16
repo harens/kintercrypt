@@ -40,7 +40,7 @@ def xor_cipher(text: List[int], password: List[int]) -> List[int]:
     if password_length < text_length:
         # This makes the password longer than required
         # It isn't necessary to shorten it, since zip does this for us
-        password = password * (text_length // password_length + 1)
+        password *= (text_length // password_length + 1)
 
     # Performs the xor operator on each element in the two lists
     return [(a ^ b) for (a, b) in zip(text, password)]

@@ -40,7 +40,7 @@ def main_cipher(text: str,
     """
 
     # Convert both the plaintext/ciphertext and password to a list of bytes
-    plaintext_bytes = codec.string_bytes(text)
+    plaintext_bytes = codec.string_bytes(text, crypt)
     password_bytes = codec.string_bytes(password)
 
     bytes_result: List[int] = []
@@ -48,4 +48,4 @@ def main_cipher(text: str,
     if algorithm == "XOR":
         bytes_result = xor_cipher(plaintext_bytes, password_bytes)
 
-    return codec.bytes_string(bytes_result)
+    return codec.bytes_string(bytes_result, crypt)

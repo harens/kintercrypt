@@ -52,7 +52,6 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         initial_value: Initial value of the encrypt/decrypt dropdown menu
 
     """
-
     def __init__(self, parent: tk.Tk, **kw: object) -> None:
         # Suggested in the Frame docs
         # Inherit the properties of the parent class
@@ -159,9 +158,10 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
                 row=1, column=0, sticky="WE",
                 pady=10)  # Padding for the middle button spaces all buttons
 
-        ttk.Button(
-            button_area, text="Start", command=self.start_cipher).grid(
-                row=2, column=0, sticky="WE")
+        ttk.Button(button_area, text="Start",
+                   command=self.start_cipher).grid(row=2,
+                                                   column=0,
+                                                   sticky="WE")
 
         self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
 
@@ -170,8 +170,8 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         ttk.Label(self.tab2, text="Choose Cipher:").grid(row=0, column=0)
         self.initial_cipher.set("XOR")
 
-        option_menu = ttk.OptionMenu(self.tab2, self.initial_cipher,
-                                     "XOR", "XOR")
+        option_menu = ttk.OptionMenu(self.tab2, self.initial_cipher, "XOR",
+                                     "XOR")
         option_menu.grid(
             row=0, column=1
         )  # Separate grid so that the widget isn't assigned as None
@@ -211,7 +211,7 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             return
 
         crypt_choice = (self.initial_crypt.get()
-                         )  # Whether the user wants to encrypt or decrypt
+                        )  # Whether the user wants to encrypt or decrypt
 
         # User's choice of encryption algorithm
         cipher_choice = (self.initial_cipher.get())
@@ -221,7 +221,7 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         start_time = time()
 
         # Opens the chosen file as read only
-        with open(self.file, "r") as chosen_file:
+        with open(self.file, "r", encoding='utf-8') as chosen_file:
             file_contents = chosen_file.read()
 
         final_result = main_cipher(file_contents, self.password, cipher_choice,

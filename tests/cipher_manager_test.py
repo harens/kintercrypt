@@ -33,5 +33,13 @@ def test_xor(text: str, password: str) -> None:
         text: Plaintext to be encrypted and decrypted
         password: Password to encrypt and decrypt the plaintext
     """
-    assert main_cipher(main_cipher(text, password, "XOR"), password,
+
+    # Encrypts some text and then decrypts it
+    # The original plaintext should be the output
+    assert main_cipher(main_cipher(text, password, "XOR"), password, "XOR",
+                       'decrypt') == text
+
+    # Decrypts some text and then encrypts it
+    # The original ciphertext should be the output
+    assert main_cipher(main_cipher(text, password, "XOR", 'decrypt'), password,
                        "XOR") == text

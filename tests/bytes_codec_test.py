@@ -17,7 +17,7 @@
 
 This script tests various aspects of the two binary codec functions
 Tests codec with characters of varying difficulty
-Both are tested simultaneously, be encoding a value and then decoding it
+Both are tested simultaneously, be encrypting some text and then decrypting it
 """
 
 import pytest
@@ -27,9 +27,10 @@ from tests.random_generator import generate_text
 
 def test_simple() -> None:
     """More Simple characters"""
-    assert bytes_string(string_bytes("Hello World")) == "Hello World"
-    assert bytes_string(string_bytes("123ę")) == "123ę"
-    assert bytes_string(string_bytes(" ")) == " "
+    assert bytes_string(string_bytes("Hello World"),
+                        'decrypt') == "Hello World"
+    assert bytes_string(string_bytes("123ę"), 'decrypt') == "123ę"
+    assert bytes_string(string_bytes(" "), 'decrypt') == " "
 
 
 # The following examples are from https://stackoverflow.com/a/51539774/10763533
@@ -37,21 +38,24 @@ def test_simple() -> None:
 
 def test_emoji() -> None:
     """Unicode Emojis"""
-    assert bytes_string(string_bytes("👱👱🏻👱🏼👱🏽👱🏾👱🏿")) == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
-    assert bytes_string(string_bytes("🧟‍♀️🧟‍♂️")) == "🧟‍♀️🧟‍♂️"
-    assert bytes_string(string_bytes("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️")) == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
+    assert bytes_string(string_bytes("👱👱🏻👱🏼👱🏽👱🏾👱🏿"),
+                        'decrypt') == "👱👱🏻👱🏼👱🏽👱🏾👱🏿"
+    assert bytes_string(string_bytes("🧟‍♀️🧟‍♂️"), 'decrypt') == "🧟‍♀️🧟‍♂️"
+    assert bytes_string(string_bytes("👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"),
+                        'decrypt') == "👨‍❤️‍💋‍👨👩‍👩‍👧‍👦️"
 
 
 def test_other() -> None:
     """Characters that do not match the other groups"""
 
     # Words in different directions
-    assert bytes_string(string_bytes("اختبار النص")) == "اختبار النص"
-    assert bytes_string(string_bytes("اليسار")) == "اليسار"
+    assert bytes_string(string_bytes("اختبار النص"),
+                        'decrypt') == "اختبار النص"
+    assert bytes_string(string_bytes("اليسار"), 'decrypt') == "اليسار"
 
 
 # Generates 200 strings of max length 200 of random unicode
 @pytest.mark.parametrize("text", [*(generate_text(200, 200))])
 def test_random(text: str) -> None:
     """Tests with randomly generated strings"""
-    assert bytes_string(string_bytes(text)) == text
+    assert bytes_string(string_bytes(text), 'decrypt') == text

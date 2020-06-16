@@ -40,9 +40,8 @@ def test_choose_file(mocker: MockFixture) -> None:
     WINDOW.start_cipher()
 
     # File chosen
-    mocker.patch(
-        "kintercrypt.main_gui.askopenfilename",
-        return_value="example_file.txt")
+    mocker.patch("kintercrypt.main_gui.askopenfilename",
+                 return_value="example_file.txt")
     WINDOW.choose_file()
 
 
@@ -70,14 +69,13 @@ def test_password(mocker: MockFixture) -> None:
                 mocker: Wrapper for pytest of the mock package
         """
     # No password
-    mocker.patch(
-        "tests.main_gui_test.WINDOW.password_entry.get", return_value=0)
+    mocker.patch("tests.main_gui_test.WINDOW.password_entry.get",
+                 return_value=0)
     WINDOW.start_cipher()
 
     # Sets password
-    mocker.patch(
-        "tests.main_gui_test.WINDOW.password_entry.get",
-        return_value='example_password')
+    mocker.patch("tests.main_gui_test.WINDOW.password_entry.get",
+                 return_value='example_password')
 
     # Contents of file
     mocker.patch('builtins.open',
