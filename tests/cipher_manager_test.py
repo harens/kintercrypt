@@ -36,10 +36,8 @@ def test_xor(text: str, password: str) -> None:
 
     # Encrypts some text and then decrypts it
     # The original plaintext should be the output
-    assert main_cipher(main_cipher(text, password, "XOR"), password, "XOR",
-                       'decrypt') == text
 
-    # Decrypts some text and then encrypts it
-    # The original ciphertext should be the output
-    assert main_cipher(main_cipher(text, password, "XOR", 'decrypt'), password,
-                       "XOR") == text
+    # It's difficult to test the opposite (i.e. decrypt then encrypt)
+    # This is since the encrypted version is formatted, and so isn't the same as the original text
+    assert main_cipher(main_cipher(text, password, "XOR"), password, "XOR",
+                       'Decrypt') == text
