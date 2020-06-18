@@ -1,6 +1,5 @@
 language: python
 cache: pip
-sudo: false
 jobs:
   include:
     - name: "Python 3.8.0 on Xenial Linux"
@@ -25,8 +24,21 @@ install:
   - pip3 install coveralls
   - pip3 install mypy
   - pip3 install pytest_mock
+  - pip3 install pyinstaller
 script:
   - mypy kintercrypt tests --config-file=tox.ini  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
+before_deploy:
+  - pyinstaller kintercrypt.spec --onefile -w
+deploy:
+  provider:   # Github releases
+  api_key: $RELEASE_TOKEN
+  file_glob: true
+  file: dist/*
+  skip_cleanup: true  # Files aren't deleted
+  draft: true
+  on:
+    tags: true
+  name: $TRAVIS_TAG (DRAFT)
 after_success:
   - coveralls
