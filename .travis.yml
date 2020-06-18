@@ -35,6 +35,7 @@ before_deploy:  # Creates a dmg file for MacOS
 deploy:
   provider: releases # Github releases
   api_key: $RELEASE_TOKEN
+  skip_cleanup: true
   file_glob: true
   file: dist/*
   draft: true
