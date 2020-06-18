@@ -31,13 +31,12 @@ script:
 before_deploy:  # Creates a dmg file for MacOS
   - pyinstaller kintercrypt.spec --onefile -w
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then hdiutil create dist/kintercrypt.dmg -srcfolder dist/kintercrypt.app -ov; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; rm -rf dist/kintercrypt.app; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -rf dist/kintercrypt.app; fi
 deploy:
   provider: releases # Github releases
   api_key: $RELEASE_TOKEN
   file_glob: true
   file: dist/*
-  skip_cleanup: true  # Files aren't deleted
   draft: true
   on:
     tags: true
