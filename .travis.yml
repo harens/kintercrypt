@@ -31,7 +31,7 @@ script:
 before_deploy:
   - pyinstaller kintercrypt.spec --onefile -w
 deploy:
-  provider:   # Github releases
+  provider: releases # Github releases
   api_key: $RELEASE_TOKEN
   file_glob: true
   file: dist/*
