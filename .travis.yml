@@ -28,8 +28,10 @@ install:
 script:
   - mypy kintercrypt tests --config-file=tox.ini  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
-before_deploy:
+before_deploy:  # Creates a dmg file for MacOS
   - pyinstaller kintercrypt.spec --onefile -w
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then hdiutil create dist/kintercrypt.dmg -srcfolder dist/kintercrypt.app -ov; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; rm -rf dist/kintercrypt.app; fi
 deploy:
   provider: releases # Github releases
   api_key: $RELEASE_TOKEN
