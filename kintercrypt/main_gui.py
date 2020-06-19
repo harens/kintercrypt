@@ -18,13 +18,10 @@
 This module sets up the GUI for kintercrypt, including the various tkinter widgets and properties
 """
 
-from pathlib import Path
-from os.path import getsize
-from tkinter.filedialog import askopenfilename
 from tkinter.scrolledtext import ScrolledText
+from tkinter.messagebox import showerror
 from tkinter import ttk
 import tkinter as tk
-from time import ctime, time
 from kintercrypt.ciphers.cipher_manager import main_cipher
 
 
@@ -40,9 +37,6 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         width: Minimum possible window width
         height: Minimum possible window height
-
-        file: The file to be encrypted/decrypted
-        password: Password to encrypt/decrypt the file
 
         note: The notebook interface
         tab1: General tab
@@ -64,10 +58,6 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         self.width = 400
         self.height = 200
 
-        # File to be encrypted/decrypted and password
-        self.file = ""
-        self.password = ""
-
         # Create the tabs
         self.note = ttk.Notebook(self.parent)
         self.tab1 = ttk.Frame(self.note)
@@ -75,11 +65,11 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         # Assign tab titles
         self.note.add(self.tab1, text="General")
-        self.note.add(self.tab2, text="Cipher")
+        self.note.add(self.tab2, text="Settings")
 
         self.note.pack(fill=tk.BOTH, expand=True)
 
-        # Outputs diagnostic results of encryption
+        # Allows user to input plaintext and receive ciphertext
         # The following properties are not in the "add widgets" method
         # This is since it needs to be accessed by other methods
         self.output_area = ScrolledText(self.tab1, wrap=tk.WORD)
@@ -100,19 +90,6 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         self.add_widgets_tab1()
         self.add_widgets_tab2()
 
-        # Beginning output messages
-        self.output_area.insert(tk.INSERT, f"KINTERCRYPT LOG:\n")
-        self.log_output("kintercrypt started")
-
-    def log_output(self, text: str) -> None:
-        """Formats the output to show the time
-
-        Args:
-            text: Text to be displayed in the log
-
-        """
-        self.output_area.insert(tk.INSERT, f"{ctime()} - {text}\n")
-
     def configure_app(self) -> None:
         """Sets up properties of the main window"""
         self.parent.title("kintercrypt")
@@ -122,11 +99,10 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         # Allows the window to be resizable
         # The range denotes the number of columns and rows
-        for axis in range(4):
+        for axis in range(2):
             self.tab1.rowconfigure(axis, weight=1)
             self.tab1.columnconfigure(axis, weight=1)
 
-        for axis in range(2):
             self.tab2.rowconfigure(axis, weight=1)
             self.tab2.columnconfigure(axis, weight=1)
 
@@ -143,27 +119,29 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         # Allows the buttons to be in the same grid cell
         button_area = ttk.Frame(self.tab1)
-        button_area.grid(row=1, column=0)
+        button_area.grid(row=2, column=1, sticky='new')
+
+        # Allows buttons to be resizable
+        for axis in range(2):
+            button_area.rowconfigure(axis, weight=1)
+            button_area.columnconfigure(axis, weight=1)
+
+        ttk.Button(button_area, text="Start",
+                   command=self.start_cipher).grid(row=0,
+                                                   column=0,
+                                                   pady=10,
+                                                   sticky='new')
 
         self.initial_crypt.set("Encrypt")
         # Encrypt twice since otherwise, decypt is the only option
         option_menu = ttk.OptionMenu(button_area, self.initial_crypt,
                                      "Encrypt", "Encrypt", "Decrypt")
         option_menu.grid(
-            row=0, column=0
-        )  # Separate grid so that the widget isn't assigned as None
+            row=0, column=1, sticky='new',
+            pady=10)  # Separate grid so that the widget isn't assigned as None
 
-        ttk.Button(
-            button_area, text="Choose file", command=self.choose_file).grid(
-                row=1, column=0, sticky="WE",
-                pady=10)  # Padding for the middle button spaces all buttons
-
-        ttk.Button(button_area, text="Start",
-                   command=self.start_cipher).grid(row=2,
-                                                   column=0,
-                                                   sticky="WE")
-
-        self.output_area.grid(row=1, column=1, columnspan=3, sticky="WE")
+        ttk.Label(self.tab1, text="Enter text:").grid(row=1, column=0)
+        self.output_area.grid(row=1, column=1, sticky="WE")
 
     def add_widgets_tab2(self) -> None:
         """Sets up widgets for the cipher tab"""
@@ -176,17 +154,6 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
             row=0, column=1
         )  # Separate grid so that the widget isn't assigned as None
 
-    def choose_file(self) -> None:
-        """Allows the user to choose a file, and detects if one has been selected"""
-        # Creates a file dialog object
-        self.file = askopenfilename()
-
-        if not self.file:  # If file selector is opened, but no file is chosen
-            self.log_output("No file chosen")
-        else:
-            # Basename only outputs the file name, not the path
-            self.log_output(f"{Path(self.file).stem} chosen")
-
     def start_cipher(self) -> None:
         """Performs various checks before encryption begins
 
@@ -195,19 +162,20 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
 
         """
 
+        # Text inputted by the user
+        # First parameter indicates to read from the first line
+        # Second parameter removes the last character, which is an undesired newline
+        user_text = self.output_area.get("1.0", 'end-1c')
+
         # Various errors that can occur
-        if not self.file:
-            self.log_output("ERROR: File not chosen")
+        if not user_text:
+            showerror('kintercrypt', "No text entered!")
             return
 
-        if not getsize(self.file):
-            self.log_output("ERROR: File is empty")
-            return
+        user_password = self.password_entry.get()
 
-        self.password = self.password_entry.get()
-
-        if not self.password:
-            self.log_output("ERROR: Password not set")
+        if not user_password:
+            showerror('kintercrypt', "Password not set!")
             return
 
         crypt_choice = (self.initial_crypt.get()
@@ -216,23 +184,15 @@ class App(tk.Frame):  # pylint: disable=too-many-ancestors
         # User's choice of encryption algorithm
         cipher_choice = (self.initial_cipher.get())
 
-        # Encrypt -> Encryption, etc.
-        self.log_output(f"{crypt_choice}ion started")
-        start_time = time()
-
-        # Opens the chosen file as read only
-        with open(self.file, "r", encoding='utf-8') as chosen_file:
-            file_contents = chosen_file.read()
-
-        final_result = main_cipher(file_contents, self.password, cipher_choice,
+        # Determines the ciphertext/plaintext
+        final_result = main_cipher(user_text, user_password, cipher_choice,
                                    crypt_choice)
 
-        with open(self.file, "w") as result_file:
-            result_file.write(final_result)
+        # Removes the user's input
+        self.output_area.delete('1.0', tk.END)
 
-        finish_time = time()
-        total_duration = round(finish_time - start_time, 4)
-        self.log_output(f"{crypt_choice}ion Finished in {total_duration}s!")
+        # Inserts the encrypted/decrypted output
+        self.output_area.insert(tk.INSERT, final_result)
 
 
 def main() -> None:

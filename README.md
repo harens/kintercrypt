@@ -16,6 +16,7 @@
 * Simple GUI interface
 * Cross-platform support
 * Extensive in-code comments and docstrings to explain how various ciphers/codecs work
+* Written in pure Python with no dependencies required to run the program, making it trivial to install
 
 ## Installation
 

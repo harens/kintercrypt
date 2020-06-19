@@ -19,46 +19,31 @@ This script tests various aspects of the front end tkinter gui
 """
 
 import tkinter as tk
-from pytest_mock import MockFixture, pytest
-
+from pytest_mock import MockFixture
 from kintercrypt import main_gui
 
 # Creates a new instance of the GUI class
 WINDOW = main_gui.App(tk.Tk())
 
 
-def test_choose_file(mocker: MockFixture) -> None:
-    """Runs various methods depending on whether a file has been chosen
+# Session mocker since we want the output_area contents to be accessible to the next test
+# We also want pop ups to not appear throughout
+def test_user_text(session_mocker: MockFixture) -> None:
+    """Runs various methods depending on whether text has been entered
 
     args:
         mocker: Wrapper for pytest of the mock package
     """
 
-    # File not chosen
-    mocker.patch("kintercrypt.main_gui.askopenfilename", return_value="")
-    WINDOW.choose_file()
+    # Prevents pop ups from appearing
+    session_mocker.patch("kintercrypt.main_gui.showerror")
+
+    # Text not entered
     WINDOW.start_cipher()
 
-    # File chosen
-    mocker.patch("kintercrypt.main_gui.askopenfilename",
-                 return_value="example_file.txt")
-    WINDOW.choose_file()
-
-
-# Session scope since we still want the file to have some contents for the next tests
-def test_file_contents(session_mocker: MockFixture) -> None:
-    """Runs the start cipher method with different file contents
-
-        args:
-            mocker: Wrapper for pytest of the mock package
-    """
-
-    # File is empty
-    session_mocker.patch("kintercrypt.main_gui.getsize", return_value=0)
-    WINDOW.start_cipher()
-
-    # File has contents
-    session_mocker.patch("kintercrypt.main_gui.getsize", return_value=1)
+    # Text entered
+    session_mocker.patch("tests.main_gui_test.WINDOW.output_area.get",
+                         return_value="example text")
     WINDOW.start_cipher()
 
 
@@ -68,16 +53,13 @@ def test_password(mocker: MockFixture) -> None:
             args:
                 mocker: Wrapper for pytest of the mock package
         """
+
     # No password
     mocker.patch("tests.main_gui_test.WINDOW.password_entry.get",
                  return_value=0)
-    WINDOW.start_cipher()
 
     # Sets password
     mocker.patch("tests.main_gui_test.WINDOW.password_entry.get",
                  return_value='example_password')
 
-    # Contents of file
-    mocker.patch('builtins.open',
-                 mocker.mock_open(read_data='example content'))
     WINDOW.start_cipher()
