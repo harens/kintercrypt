@@ -28,14 +28,14 @@ install:
 script:
   - mypy kintercrypt tests --config-file=tox.ini  # Type checking
   - pytest --cov=kintercrypt/ --cov-report term-missing
-before_deploy:  # Creates a dmg file for MacOS
+before_deploy:  # Creates a dmg file for MacOS - It doesn't deploy the default .app
   - pyinstaller kintercrypt.spec --onefile -w
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then hdiutil create dist/kintercrypt.dmg -srcfolder dist/kintercrypt.app -ov; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then rm -rf dist/kintercrypt.app; fi
 deploy:
   provider: releases # Github releases
   api_key: $RELEASE_TOKEN
-  skip_cleanup: true
+  skip_cleanup: true  # Ignore travis lint. This is still necessary for now
   file_glob: true
   file: dist/*
   draft: true
