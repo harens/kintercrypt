@@ -22,7 +22,14 @@
 
 The latest release can be found [here](https://github.com/harens/kintercrypt/releases)
 
-Alternatively, to build from source, download the source code from [here](https://github.com/harens/kintercrypt/archive/master.zip) and run [`kintercrypt/main_gui.py`](https://github.com/harens/kintercrypt/blob/master/kintercrypt/main_gui.py)
+Alternatively, if you are on macOS, you can run the following:
+
+```
+brew tap harens/tap
+brew cask install kintercrypt
+```
+
+To build from source, download the source code from [here](https://github.com/harens/kintercrypt/archive/master.zip) and run [`kintercrypt/main_gui.py`](https://github.com/harens/kintercrypt/blob/master/kintercrypt/main_gui.py)
 
 ## Why?
 
